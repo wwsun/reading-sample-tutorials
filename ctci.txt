@@ -299,6 +299,66 @@ LinkedListNode kthToLast(LinkedListNode head, int k){
 	return p1;
 }
 
-//question 2.2
+//question 2.3
 //delete a node in the middle of a singly linked list
 //given only access to that node
+
+//solution: copy the data from the next node over to the current node, and then to delete the next node
+public static boolean deleteNode(LinkedListNode n){
+	if(n==null||n.next==null)
+		return false;
+	LinkedListNode next = n.next;
+	n.data = next.data;
+	n.next = next.next;
+	return true;
+}
+
+//attention: this problem cannot be solved if the node to be deleted is the last node in the linked list
+
+
+//question 2.4
+//partition a linkd list around a value x
+//all nodes less than x come before all nodes
+//greater than or equal to x
+
+public LinkedListNode partition(LinkedListNode node, int x){
+	LinkedListNode beforeStart = null;
+	LinkedListNode beforeEnd = null;
+	LinkedListNode afterStart = null;
+	LinkedListNode afterEnd = null;
+	
+	//partition list
+	while(node != null){
+		LinkedListNode next = node.next;
+		node.next = null;
+		if(node.data < x){
+			//insert node into end of before list
+			if(beforeStart == null){
+				beforeStart = node;
+				beforeEnd = beforeStart;
+			}else{
+				beforeEnd.next = node;
+				beforeEnd = node;
+			}
+		}else{
+			//insert node into end of after list
+			if(afterStart == null){
+				afterStart = node;
+				afterEnd = afterStart;
+			}else{
+				afterEnd.next = node;
+				afterEnd = node;
+			}
+			
+		}
+		node = next;
+	}
+	
+	if(beforeStart == null){
+		return afterStart;
+	}
+	
+	//merge before and after
+	beforeEnd.next = afterStart;
+	return beforeStart;
+}
