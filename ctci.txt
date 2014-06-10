@@ -1,0 +1,304 @@
+
+public String joinWords(String[] words){
+	StringBuffer sentence = new StringBuffer();
+	for(String w:words){
+		sentence.append(w);
+	}
+	return sentence.toString();
+}
+
+//question 1.1
+
+public boolean isUniqueChars(String str){
+	if(Str.length() > 256) return false;
+	
+	boolean[] charSet = new boolean[256];
+	for(int i=0;i<str.length();i++){
+		int val = str.charAt(i); //返回指定索引出的char值
+		if(charSet[val])
+			return false;
+		charSet[val] = true;
+	}
+	return true;
+}
+
+//question 1.2
+//implement in c/c++
+void reverse(char* str){
+	char* end = str;
+	char tmp;
+	if(str){
+		while(*end){ //find end of the string
+			++end;
+		}
+		--end;//回退一个字符，因为最后一个字符为null
+	}
+	
+	//从字符串首尾开始交换两个字符，直至两个指针在中间碰头
+	while(str < end){
+		tmp = *str;
+		*str++ = *end;
+		*end-- = tmp;
+	}
+}
+
+//question 1.3
+public String sort(String s){
+	//将此字符串转换为一个新的字符数组
+	char[] content = s.toCharArray();
+	java.util.Arrays.sort(content);
+	return new String(content);
+}
+
+public boolean permutation(String s, String t){
+	if(s.length()!=t.length())
+		return false;
+	return
+		sort(s).equals(sort(t));
+}
+
+//question 1.4
+public void replaceSpaces(char[] str, int length){
+	int spacecount = 0, newLength, i;
+	for(i=0;i<length;i++){
+		if(str[i]==' '){
+			spaceCount++;
+		}
+	}
+	newLength = length + spaceCount*2;
+	str[newLength] = '\0';
+	for(i=length-1;i>=0;i--){
+		if(str[i]==' '){
+			str[newLength-1] = '0';
+			str[newLength-2] = '2';
+			str[newLength-3] = '%';
+			newLength -= 3;
+		}else{
+			str[newLength-1] = str[i];
+			newLength -= 1;
+		}
+	}
+}
+
+//question 1.5
+//iterate through the string, copying characters to a new string
+public String compressBad(String str){
+	String mystr = "";
+	char last = str.charAt(0);
+	int count = 1;
+	for(int i = 1; i<str.length(); i++){
+		if(str.charAt(i)==last){
+			count++;
+		}else{
+			mystr += last + "" + count;
+			last = str.charAt(i);
+			count = 1;
+		}
+	}
+	return mystr + last + count;
+}
+
+//a bettern alg.
+public String compressBetter(String str){
+	int size = countCompression(str);
+	if(size >= str.length()){
+		return str;
+	}
+	
+	StringBuffer mystr = new StringBuffer();
+	char last = str.charAt(0);
+	int count = 1;
+	
+	for(int i = 1; i<str.length(); i++){
+		if(str.charAt(i)==last){ //find the duplicate chars
+			count++;
+		}else{
+			mystr.append(last).append(count);
+			last = str.charAt(i);
+			count = 1;
+		}
+	}
+	mystr.append(last).append(count);
+	return mystr.toString();
+}
+
+int countCompression(String str){
+	if(str == null || str.isEmpty() ) return 0;
+	char last = str.charAt(0);
+	int size = 0;
+	int count = 1;
+	for(int i = 1;i<str.length();i++){
+		if(str.charAt(i)==last)		
+			count ++;
+		else{
+			last = str.charAt(i);
+			size += 1 + String.valueOf(count).length();
+			count = 1;
+		}
+	}
+	size += 1 + String.valueOf(count).length();	
+}
+
+//question 1.7
+public void setZeros(int[][] matrix){
+	boolean[] row = new boolean[matrix.length];
+	boolean[] column = new boolean[matrix[0].length];
+	
+	//store the row and column index with value 0
+	for(int i = 0;i<matrix.length;i++){
+		for(int j=0;j<matrix[0].length;j++){
+			if(matrix[i][j]==0){
+				row[i] = true;
+				column[j]=true;
+			}
+		}
+	}
+	
+	//set arr[i][j] to 0
+	for(int i=0;i<matrix.length;i++){
+		for(int j=0;j<matrix[0].length;j++){
+			if(row[i]||column[j]){
+				matrix[i][j]=0;
+			}
+		}
+	}
+}
+
+//question 1.8
+//given two strings, s1 and s2, write code to check if s2 is a rotation of s1
+//using one call to isSubString(str1,str2)
+
+public boolean isRotation(String s1, String s2){
+	int len = s1.length();
+	if(len == s2.length() && len>0){
+		String s1s1 = s1+s1;
+		return isSubstring(s1s1,s2);
+	}
+	return false;
+}
+
+
+//creating a linked list
+class Node {
+	Node next = null;
+	int data;
+	
+	public Node(int d){
+		data = d;
+	}
+	
+	void appendToTail(int d){
+		Node end = new Node(d);
+		Node n = this;
+		while(n.next!=null) {
+			n = n.next;
+		}
+		n.next = end;
+	}
+	
+	Node deleteNode(Node head, int d){
+		Node n = head;
+		if (n.data == d){
+			return head.next;//moved head
+		}
+		
+		while(n.next!=null){
+			if(n.next.data==d){
+				n.next = n.next.next;
+				return head;//head didn't change
+			}
+			n = n.next;
+		}
+		return head;
+	}
+}
+
+//question 2.1
+public static void deleteDups(LinkedListNode n){
+	HashTable table = new HashTable();
+	LinkedListNode previous = null;
+	while(n!=null){
+		if(table.containsKey(n.data))
+			previous.next = n.next;
+		else{		
+			table.put(n.data,true);
+			previous = n;
+		}
+		n = n.next;
+	}
+}
+
+//using runner, whithout buffer
+//two pointer: current which iterates through the linked list,
+//and runner which checks all subsequent nodes
+public static void deleteDups(LinkedListNode head){
+	if(head == null)return;
+	
+	LinkedListNode current = head;
+	while(current!=null){
+		//remove all future nodes that have the same value
+		LinkedListNode runner = current;
+		while(funner.next != null){
+			if(runner.next.data == current.data){
+				runner.next = runner.next.next;
+			}else{
+				runner = runner.next;
+			}
+		}
+	}
+}
+
+//question2.2 找出单向链表中的倒数第k个节点
+//recursive: space O(n)
+//solution 1: don't return the element
+public static int kthToLast(LinkedListNode head, int k){
+	if(head == null) return 0;
+	int i = kthToLast(head.next, k) + 1;
+	if(i==k)
+		System.out.println(head.data);
+	return i;
+}
+
+//solution 2: use c++ and to pass values by reference
+node* kthToLast(node* head, int k, int& i){
+	if(head==NULL){
+		return NULL;
+	}
+	node* nd = kthToLast(head->next, k, i);
+	i = i+1;
+	if(i==k)
+		return head;
+	return nd;
+}
+
+//solution 3: iterative
+//using two pointers, p1 and p2
+//putting p1 at the begining and moving p2 k nodes into the list
+//p2 will hit the end of the linked list after LENGTH - k steps
+//time = O(n)  space = O(1)
+
+LinkedListNode kthToLast(LinkedListNode head, int k){
+	if(k<=0) return null;
+	
+	LinkedListNode p1 = head;
+	LinkedListNode p2 = head;
+	
+	//move p2 forward k nodes into the list
+	for(int i=0;i<k-1;i++){
+		if(p2==null) return null;
+		p2 = p2.next;
+	}
+	if(p2==null) return null;
+	
+	//move p1 and p2 together
+	//when p2 hits the end, p1 will at the Kth to the last
+	while(p2.next!=null){
+		p1 = p1.next;
+		p2 = p2.next;
+	}
+	return p1;
+}
+
+//question 2.2
+//delete a node in the middle of a singly linked list
+//given only access to that node
