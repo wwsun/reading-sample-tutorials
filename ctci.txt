@@ -11,7 +11,7 @@ public String joinWords(String[] words){
 
 public boolean isUniqueChars(String str){
 	if(Str.length() > 256) return false;
-	
+
 	boolean[] charSet = new boolean[256];
 	for(int i=0;i<str.length();i++){
 		int val = str.charAt(i); //返回指定索引出的char值
@@ -33,7 +33,7 @@ void reverse(char* str){
 		}
 		--end;//回退一个字符，因为最后一个字符为null
 	}
-	
+
 	//从字符串首尾开始交换两个字符，直至两个指针在中间碰头
 	while(str < end){
 		tmp = *str;
@@ -104,11 +104,11 @@ public String compressBetter(String str){
 	if(size >= str.length()){
 		return str;
 	}
-	
+
 	StringBuffer mystr = new StringBuffer();
 	char last = str.charAt(0);
 	int count = 1;
-	
+
 	for(int i = 1; i<str.length(); i++){
 		if(str.charAt(i)==last){ //find the duplicate chars
 			count++;
@@ -128,7 +128,7 @@ int countCompression(String str){
 	int size = 0;
 	int count = 1;
 	for(int i = 1;i<str.length();i++){
-		if(str.charAt(i)==last)		
+		if(str.charAt(i)==last)
 			count ++;
 		else{
 			last = str.charAt(i);
@@ -136,14 +136,14 @@ int countCompression(String str){
 			count = 1;
 		}
 	}
-	size += 1 + String.valueOf(count).length();	
+	size += 1 + String.valueOf(count).length();
 }
 
 //question 1.7
 public void setZeros(int[][] matrix){
 	boolean[] row = new boolean[matrix.length];
 	boolean[] column = new boolean[matrix[0].length];
-	
+
 	//store the row and column index with value 0
 	for(int i = 0;i<matrix.length;i++){
 		for(int j=0;j<matrix[0].length;j++){
@@ -153,7 +153,7 @@ public void setZeros(int[][] matrix){
 			}
 		}
 	}
-	
+
 	//set arr[i][j] to 0
 	for(int i=0;i<matrix.length;i++){
 		for(int j=0;j<matrix[0].length;j++){
@@ -182,11 +182,11 @@ public boolean isRotation(String s1, String s2){
 class Node {
 	Node next = null;
 	int data;
-	
+
 	public Node(int d){
 		data = d;
 	}
-	
+
 	void appendToTail(int d){
 		Node end = new Node(d);
 		Node n = this;
@@ -195,13 +195,13 @@ class Node {
 		}
 		n.next = end;
 	}
-	
+
 	Node deleteNode(Node head, int d){
 		Node n = head;
 		if (n.data == d){
 			return head.next;//moved head
 		}
-		
+
 		while(n.next!=null){
 			if(n.next.data==d){
 				n.next = n.next.next;
@@ -220,7 +220,7 @@ public static void deleteDups(LinkedListNode n){
 	while(n!=null){
 		if(table.containsKey(n.data))
 			previous.next = n.next;
-		else{		
+		else{
 			table.put(n.data,true);
 			previous = n;
 		}
@@ -233,7 +233,7 @@ public static void deleteDups(LinkedListNode n){
 //and runner which checks all subsequent nodes
 public static void deleteDups(LinkedListNode head){
 	if(head == null)return;
-	
+
 	LinkedListNode current = head;
 	while(current!=null){
 		//remove all future nodes that have the same value
@@ -279,17 +279,17 @@ node* kthToLast(node* head, int k, int& i){
 
 LinkedListNode kthToLast(LinkedListNode head, int k){
 	if(k<=0) return null;
-	
+
 	LinkedListNode p1 = head;
 	LinkedListNode p2 = head;
-	
+
 	//move p2 forward k nodes into the list
 	for(int i=0;i<k-1;i++){
 		if(p2==null) return null;
 		p2 = p2.next;
 	}
 	if(p2==null) return null;
-	
+
 	//move p1 and p2 together
 	//when p2 hits the end, p1 will at the Kth to the last
 	while(p2.next!=null){
@@ -326,7 +326,7 @@ public LinkedListNode partition(LinkedListNode node, int x){
 	LinkedListNode beforeEnd = null;
 	LinkedListNode afterStart = null;
 	LinkedListNode afterEnd = null;
-	
+
 	//partition list
 	while(node != null){
 		LinkedListNode next = node.next;
@@ -349,16 +349,62 @@ public LinkedListNode partition(LinkedListNode node, int x){
 				afterEnd.next = node;
 				afterEnd = node;
 			}
-			
+
 		}
 		node = next;
 	}
-	
+
 	if(beforeStart == null){
 		return afterStart;
 	}
-	
+
 	//merge before and after
 	beforeEnd.next = afterStart;
 	return beforeStart;
 }
+
+
+//question 2.5
+
+
+
+//question 2.6
+//given a circular linked list, implement an algorithm which return
+//the node at the beginning of the loop
+
+//solution
+//1.create two pointers, FastPointer and SlowPointer
+//2.Move FastPointer at a rate of 2 steps and SlowPointer at a rate of 1 step
+//3.When they collide, move SlowPointer to LinkedListHead, keep FastPointer where it is
+//4.Move SlowPointer and FastPointer at a rate of one step. Return the new collision point
+
+LinkedListNode FindBeginning(LinkedListNode head){
+	LinkedListNode slow = head;
+	LinkedListNode fast = head;
+
+	//find meeting point
+	while(fast != null && fast.next!=null){
+		slow = slow.next;
+		fast = fast.next.next;
+		if(slow==fast){
+			break;
+		}
+	}
+
+	//error check - no meeting point, and therefore no loop
+	if(fast == null || fast.next==null){
+		return null;
+	}
+
+	//move slow to head, keep fast at meeting point
+	slow = head;
+	while(slow!=fast){
+		slow = slow.next;
+		fast = fast.next;
+	}
+
+	//both now point to the start of the loop
+	return fast;
+}
+
+
