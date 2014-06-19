@@ -407,4 +407,432 @@ LinkedListNode FindBeginning(LinkedListNode head){
 	return fast;
 }
 
+//question 2.7
+//implement a function to check if a linked list is a palindrome
 
+boolean isPalindrome(LinkedListNode head){
+	LinkedListNode fast = head;
+	LinkedListNode slow = head;
+
+	Stack<Integer> stack = new Stack<Integer>();
+
+	/*
+	* when fast runner reaches the end of the linked list
+	* then we know we're at the middle
+	*
+	*/
+
+	while(fast != null && fast.next != null){
+		stack.push(slow.data);
+		slow = slow.next;
+		fast = falst.next.next;
+	}
+
+	//has odd number of elements, so skip the middle element
+	if(fast!=null){
+		slow = slow.next;
+	}
+
+	while(slow!=null){
+		int top = stack.pop().intValue();
+
+		//if values are diff, then it's not a palindrome
+		if(top!=slow.data){
+			return false;
+		}
+		slow = slow.next;
+	}
+
+	return true;
+}
+
+
+//8.3 stack queues
+//implement a stack: LIFO
+class Stack{
+	Node top;
+
+	Object pop(){
+		if(top!=null){
+			Object item = top.data;
+			top = top.next;
+			return item;
+		}
+		return null;
+	}
+
+	Object push(Object item){
+		Node t = new Node(item);
+		t.next = top;
+		top = t;
+
+	}
+
+	Object peek(){
+
+	}
+}
+
+//implement a queue: FIFO
+class Queue{
+	Node first, last;
+
+	void enqueue(Object item){
+		if(first==null){
+			last = new Node(item);
+			first = last;
+		}else{
+			last.next = new Node(item);
+			last = last.next;
+		}
+	}
+
+	Object dequeue(){
+		if(first != null){
+			Object item = first.data;
+			first = first.next;
+			return item;
+		}
+		return null;
+	}
+}
+
+//question 3.2 design a stack
+//push, pop, min which returns the minimum element
+//all should operate in O(1) time
+
+public class StackWithMin extends Stack<NodeWithMin>{
+	public void push(int value){
+		int newMin = Math.min(value, min());
+		super.push(new NodeWithMin(value,newMin));
+	}
+
+	public int min(){
+		if(this.isEmpty()){
+			return Integer.MAX_VALUE; //Error value
+		}else{
+			return peek().min;
+		}
+	}
+}
+
+class NodeWithMin {
+	public int value;
+	public int min;..
+
+	public NodeWithMin(int v, int min){
+		value = v;
+		this.min = min;
+	}
+}
+
+//a better solution
+//using an additional stack which keeps track of the mins
+public class StackWithMin2 extends Stack<Integer> {
+	stack<Integer> s2;
+	public StackWithMin2(){
+		s2 = new Stack<Integer>();
+	}
+
+	public void push(int value){
+		if(value <= min()){
+			s2.push(value);
+		}
+		super.push(value);
+	}
+
+	public Integer pop(){
+		int value = super.pop();
+		if(value == min){
+			s2.pop();
+		}
+		return value;
+	}
+
+	public int min(){
+		if(s2.isEmpty){
+			return Integer.MAX_VALUE;
+		}else{
+			return s2.peek();
+		}
+	}
+}
+
+//question 3.3
+//Implement a data structure SefOfStacks
+//should be composed of serveral stacks and should create a new stack once the previous one exceeds capacity
+
+class SetOfStack {
+	ArrayList<Stack> stacks = new ArrayList<Stack>();
+
+	public void push(int v){
+		Stack last = getLastStack();
+		if(last != null && !last.isFull()){
+			last.push(v);
+		} else {
+			//must create new stack
+			Stack stack = new Stack(capacity);
+			stack.push(v);
+			stacks.add(stack);
+		}
+	}
+
+	public int pop(){
+		Stack last = getLastStack();
+		int v = last.pop();
+		if (last.size == 0) stacks.remove(stacks.size() - 1);
+		return v;
+	}
+}
+
+//skip the left ...
+
+
+//question 3.4 Towers of Hanoi
+//3 touwers and N disks
+//recursive alg. using pseudocode:
+
+moveDisks(int n, Tower origin, Tower destination, Tower buffer){
+	if (n<=0) return;
+	//move top n-1 disks from origin to buffer, using destination as a buffer
+	moveDisks(n-1, origin, buffer, destination);
+
+	//move top from origin to destination
+	moveTop(orign, destination);
+
+	//move top n-1 disks from buffer to destination, using origin as buffer
+	moveDisks(n-1, buffer, destination, origin);
+}
+
+
+//implementation
+public static void main(String[] args) {
+	int n = 3;
+	Tower[] towers = new Tower[n];
+	for (int i=0; i<3; i++){
+		towers[i] = new Tower(i);
+	}
+
+	for(int i=n-1;i >=0; i--){
+		towers[0].add(i);
+	}
+
+	towers[0].moveDisks(n, towers[2], towers[1]);
+}
+
+public class Tower {
+	private Stack<Integer> disks;
+	private int index;
+	public Tower(int i){
+		disks = new Stack<Integer>();
+		index = i;
+	}
+
+	public int index(){
+		return index;
+	}
+
+	public void add(int d){
+		if(!disks.isEmpty() && disks.peek() <= d){
+			System.out.println("Error placing disk " + d);
+		} else {
+			disks.push(d);
+		}
+	}
+
+	public void moveTopTo(Tower t) {
+		int top = disks.pop();
+		t.add(top);\
+		System.out.println("Move disk " + top + " from " + index() +" to " + t.index());
+	}
+
+	public void moveDisks(int n, Tower destination, Tower buffer) {
+		if(n>0){
+			mvoeDisks(n-1, buffer, destination);
+			moveTopTo(destination);
+			buffer.moveDisks(n-1, destination, this);
+		}
+	}
+}
+
+
+//question 3.6
+//write a program to sort a stack in ascending order (with biggest items on top)
+
+public static Stack<Integer> sort(Stack<Integer> s){
+	Stack<Integer> r = new Stack<Integer>();
+
+	while(!s.isEmpty()){
+		int tmp = s.pop();
+		while( !r.isEmpty && r.peek()>tmp) {
+			s.push(tmp);
+		}
+		return r;
+	}
+}
+
+// the algorithm is o(n2) time and o(n) space
+
+
+//question 3.7
+//
+
+public abstract class Animal {
+	private int order;
+	protected String name;
+	public Animal(String n){
+		name = n;
+	}
+
+	public void setOrder(int ord){
+		order = ord;
+	}
+
+	public int getOrder(){
+		return order;
+	}
+
+	public boolean isOlderThan(Animal a){
+		return this.order < a.getOrder();
+	}
+}
+
+public class AnimalQueue{
+	LinkedList<Dog> dogs = new LinkedList<Dog>();
+	LinkedList<Cat> cats = new LinkedList<Cat>();
+
+	private int order = 0;
+
+	public void enqueue(Animal a){
+		a.setOrder(order);
+		order++;
+
+		if(a instanceof Dog) dogs.addLast((Dog)a);
+		else if(a instanceof Cat) cats.addLast((Cat)a);
+
+	}
+
+	public Animal dequeueAny(){
+		/*  look at tops of dog and cat queues, and pop the stack with
+		* the oldest value.
+		*/
+		if(dogs.size()==0){
+			return dequeueCats();
+		}else if(cats.size()==0){
+			return dequeueDogs();
+		}
+
+		Dog dog = dogs.peek();
+		Cat cat = cats.peek();
+
+		if(dog.isOlderThan(cat)){
+			return dequeueDogs();
+		}else{
+			return dequeueCats();
+		}
+	}
+
+	public Dog dequeueDogs(){
+		return dogs.poll();
+	}
+
+	public Cat dequeueCats(){
+		return cats.poll();
+	}
+}
+
+public class Dog extends Animal{
+	public Dog(String n){
+		super(n);
+	}
+}
+
+public class Cat extends Animal{
+	public Cat(String n){
+		super(n);
+	}
+}
+
+//Trees and Graphs
+//dfs pseudocode
+void search(Node root){
+	if (root == null) return;
+	visit(root);
+	root.visited = true;
+	foreach(Node n in root.adjacent){
+		if(n.visisted == false){
+			search(n);
+		}
+	}
+}
+
+//bfs pseudocode
+void search(Node root){
+	Queue queue = new Queue();
+	root.visisted = true;
+	visit(root);
+	queue.enqueue(root); //add to end of queue
+
+	while(!queue.isEmpty()){
+		Node r = queue.dequeue(); //remove from front of queue
+		foreach(Node n in r.adjacent) {
+			if(n.visisted == false){
+				visist(n);
+				n.visisted = true;
+				queue.enqueue(n);
+			}
+		}
+	}
+}
+
+//question 4.1
+//check if a binary tree is balanced
+//we can simply recurse through the entire tree, and for each node
+//and for each node, comput the heights of each subtree
+
+public static int getHeight(TreeNode root) {
+	if(root == null) return 0;
+	return Math.max(getHeight(root.left),getHeight(root.right))+1;
+}
+
+public static boolean isBalanced(TreeNode root){
+	if(root == null)return true;
+
+	int heightDiff = getHeight(root.left) - getHeight(root.right);
+	if(Math.abs(heightDiff) >1)
+		return false;
+	else
+		return isBalanced(root.left) && isBalanced(root.right);
+}
+
+//improved algorithm
+public static int checkHeight(TreeNode root){
+	if (root == null){
+		return 0;
+	}
+
+	//check if left is balanced
+	int leftHeight = checkHeight(root.left);
+	if(leftHeight == -1){
+		return -1; //not balanced
+	}
+
+	//check if right is balanced
+	int rightHeight = checkHeight(root.right);
+	if(rightHeight == -1)
+		return -1;
+
+	//check if current node is balanced
+	int heightDiff = leftHeight - rightHeight;
+	if(Math.abs(heightDiff) > 1)
+		return -1;
+	else
+		return Math.max(leftHeight,rightHeight) + 1;
+}
+
+public static boolean isBalanced(TreeNode root){
+	if(checkHeight(root) == -1){
+		return false;
+	}else
+		return true;
+}
