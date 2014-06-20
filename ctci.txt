@@ -836,3 +836,60 @@ public static boolean isBalanced(TreeNode root){
 	}else
 		return true;
 }
+
+
+//question 4.2
+//find out whether there is a route between two nodes
+public enum state{
+	Unvisted, Visited, Visiting;
+}
+
+public static boolean search(Graph g, Node start, Node end){
+	LinkedList<Node> q = new LinkedList<Node>();
+
+	for(Node u: g.getNodes()){
+		u.state = State.Unvisted;
+	}
+	start.state = State.Visiting;
+	q.add(start);
+	Node u;
+	while(!q.isEmpty()){
+		u = q.removeFirst();
+		if(u != null){
+			for(Node v:u.getAdjacent()){
+				if(v==end){
+					return true;
+				}else{
+					v.state = State.Visiting;
+					q.add(v);
+				}
+			}
+		}
+		u.state = State.Visited;
+	}
+	return false;
+}
+
+//question 4.3
+/* given a sorted array with unique integer elements
+* write an alg to create a binary search tree with minimal height
+*
+* insert into the tree the middle element of the array
+* insert the left subarray elements (into the left subtree)
+* insert the right subarray elements (into the right subtree)
+*/
+
+TreeNode createMinimalBST(int arr[], int start, int end){
+	if(end<start) return null;
+
+	int mid = (start + end)/2;
+	TreeNode n = new TreeNode(arr[mid]);
+	n.left = createMinimalBST(arr, start, mid-1);
+	n.right = createMinimalBST(arr, mid + 1, end);
+
+	return n;
+}
+
+TreeNode createMinimalBST(int array[]){
+	return createMinimalBST(array, o, array.length -1);
+}
