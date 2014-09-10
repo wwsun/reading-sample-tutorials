@@ -4,6 +4,10 @@
 # Java
 .class
 
+nbproject/
+
+
+
 *.pydevproject
 .project
 .metadata
