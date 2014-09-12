@@ -62,6 +62,9 @@ public class WeatherData implements Subject {
 		return 0;
 	}
 	
+	/**
+	 * notify all observers when the data changed
+	 */
 	public void measurementsChanged(){
 		notifyObservers();
 	}
