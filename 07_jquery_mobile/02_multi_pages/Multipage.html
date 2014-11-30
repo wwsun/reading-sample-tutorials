@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Multi-page Template</title>
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="../jqueryMobile/jquery.mobile-1.4.5.css">
+
+    <script src="../jqueryMobile/jquery-2.1.1.min.js"></script>
+    <script src="../jqueryMobile/jquery.mobile-1.4.5.js"></script>
+
+</head>
+<body>
+<section id="page1" data-role="page">
+    <header data-role="header">
+        <h1>jQuery Mobile</h1>
+    </header>
+
+    <div data-role="content">
+        <p>Content here!</p>
+        <a href="#page2" class="ui-btn">Page 2</a>
+    </div>
+
+    <footer data-role="footer" data-position="fixed">
+        <h1>Weiwei SUN</h1>
+    </footer>
+
+</section>
+
+<section id="page2" data-role="page" data-title="Second page">
+    <header data-role="header">
+        <h1>Second Page</h1>
+    </header>
+
+    <div data-role="content">
+        <a href="#page1" class="ui-btn">Return to Page 1</a>
+
+        <a href="#page3" class="ui-btn">Quit</a>
+    </div>
+
+    <footer data-role="footer" data-position="fixed">
+        <h1>Weiwei SUN</h1>
+    </footer>
+
+</section>
+
+<section id="page3" data-role="dialog" data-title="Third page: dialog">
+    <header data-role="header">
+        <h1>Sure</h1>
+    </header>
+
+    <div data-role="content">
+
+        <p>Are you sure to quit this page?</p>
+
+        <a href="#" class="ui-btn" data-theme="c" onclick="$('#page3').dialog('close')">Sure</a>
+    </div>
+
+
+</section>
+</body>
+</html>
