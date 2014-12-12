@@ -14,11 +14,14 @@ Angular is a client-side JavaScript Framework for adding interactivity to HTML. 
 In Angular applications, the view is the DOM, the controllers are JavaScript classes, and the model data is stored in object properties.
 
 ###Data Binding
+
+- A binding, denoted by ``{{}}``
+- Expressions are in the binding.
 	
-	<div ng-controller="HelloController">
-    	<input ng-model="greeting.text"><!--data binding-->
-    	<p>{{greeting.text}}, word</p>
-	</div>
+		<div ng-controller="HelloController">
+	    	<input ng-model="greeting.text"><!--data binding-->
+	    	<p>{{greeting.text}}, word</p>
+		</div>
 
 ###Dependency Injection
 
